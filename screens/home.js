@@ -5,10 +5,28 @@ import { Icon, Button } from 'native-base';
 import Slider from '../scomponents/slider';
 
 const images = [
-  { id: 1, uri: require('../assets/images.jpg'), txt: 'Image 1' },
-  { id: 2, uri: require('../assets/nasa1.jpeg'), txt: 'Image 2' },
-  { id: 3, uri: require('../assets/nasa2.jpg'), txt: 'Image 3' },
-  { id: 4, uri: require('../assets/nasa3.jpg'), txt: 'Image 4' }
+  {
+    id: 1,
+    uri:
+      'http://mars.jpl.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/01004/opgs/edr/fcam/FLB_486615455EDR_F0481570FHAZ00323M_.JPG',
+    txt: 'Operation IceBridge: Exploring Alaska’s Mountain Glacier'
+  },
+  {
+    id: 2,
+    uri: require('../assets/nasa1.jpeg'),
+    txt: 'Hubble Shows Star Cluster’s True Identity'
+  },
+  {
+    id: 3,
+    uri: require('../assets/nasa2.jpg'),
+    txt: 'Hubble Peers into the Vast Distance'
+  },
+  {
+    id: 4,
+    uri: require('../assets/nasa3.jpg'),
+    txt:
+      'In the northern constellation of Coma Berenices lies the impressive Coma Cluster'
+  }
 ];
 
 class Home extends Component {
@@ -17,10 +35,11 @@ class Home extends Component {
 
     this.state = {
       currentIndex: 0,
-      images: images,
+      images: [],
       counter: images.length,
       disliked: {},
-      liked: []
+      liked: [],
+      loading: true
     };
   }
 
@@ -29,7 +48,7 @@ class Home extends Component {
       component: {
         name: screenName,
         passProps: {
-          images: this.state.images
+          images: this.state.liked
         }
       }
     });
@@ -60,6 +79,39 @@ class Home extends Component {
     }
   }
 
+  componentDidMount = () => {
+    this.setState({ loading: true });
+    fetch(
+      'https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=2015-6-3&api_key=43EvTATZn1TBy3egVg65g2Rjda6s7ijb5VCtcOQU',
+      {
+        method: 'GET'
+      }
+    )
+      .then(response => response.json())
+      .then(responseJson => {
+        this.setState({ loading: false });
+
+        let images = [];
+        responseJson.photos.forEach(function(item, key) {
+          images.push({
+            id: item.id,
+            title: item.camera.name,
+            txt: item.camera.full_name,
+            uri: item.img_src,
+            date: item.earth_date
+          });
+        });
+
+        this.setState({
+          images
+        });
+      })
+      .catch(error => {
+        console.error(error);
+        this.setState({ loading: false });
+      });
+  };
+
   render() {
     return (
       <View style={styles.container}>
@@ -73,7 +125,7 @@ class Home extends Component {
           </Button>
           <Text style={styles.title}>My Mars</Text>
           <Button transparent onPress={() => this.goTo('Favorites')}>
-            <Icon style={{ color: 'red', fontSize: 26 }} name="logo-apple" />
+            <Icon style={{ color: 'red', fontSize: 26 }} name="heart" />
           </Button>
         </View>
 
@@ -83,6 +135,8 @@ class Home extends Component {
             onDislike={this.handleDislike}
             onLike={this.handleLike}
             counter={this.state.counter}
+            images={this.state.images}
+            isLoading={this.state.loading}
           />
         </View>
       </View>

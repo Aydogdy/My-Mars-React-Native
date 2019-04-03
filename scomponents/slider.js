@@ -103,23 +103,8 @@ export default class Slider extends React.Component {
     });
   }
 
-  componentDidMount = () => {
-    fetch('https://jsonplaceholder.typicode.com/posts/1', {
-      method: 'GET'
-    })
-      .then(response => response.json())
-      .then(responseJson => {
-        this.setState({
-          data: responseJson
-        });
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  };
-
   renderUsers = () => {
-    return images
+    return this.props.images
       .map((item, i) => {
         if (i < this.props.currentIndex) {
           return null;
@@ -165,13 +150,20 @@ export default class Slider extends React.Component {
               <Animated.View
                 style={{
                   position: 'absolute',
-                  top: 50,
+                  top: 60,
                   left: 40,
                   right: 40,
-                  zIndex: 1000
+                  zIndex: 1000,
+                  backgroundColor: 'rgba(0, 0, 0, 0.5)'
                 }}
               >
-                <Text style={{ color: 'white' }}>{item.txt}</Text>
+                <Text style={{ color: 'white', fontSize: 22 }}>
+                  {item.title}
+                </Text>
+                <Text style={{ color: 'white', fontSize: 18 }}>{item.txt}</Text>
+                <Text style={{ color: 'white', fontSize: 18 }}>
+                  {item.date}
+                </Text>
               </Animated.View>
 
               <Animated.View
@@ -206,7 +198,7 @@ export default class Slider extends React.Component {
                   resizeMode: 'cover',
                   borderRadius: 20
                 }}
-                source={item.uri}
+                source={{ uri: item.uri }}
               />
             </Animated.View>
           );
@@ -258,7 +250,10 @@ export default class Slider extends React.Component {
                   zIndex: 1000
                 }}
               >
-                <Text style={{ color: 'white' }}>{item.txt}</Text>
+                <Text style={{ color: 'white', fontSize: 20 }}>{item.txt}</Text>
+                <Text style={{ color: 'white', fontSize: 20 }}>
+                  {item.date}
+                </Text>
               </Animated.View>
 
               <Animated.View
@@ -293,7 +288,7 @@ export default class Slider extends React.Component {
                   resizeMode: 'cover',
                   borderRadius: 20
                 }}
-                source={item.uri}
+                source={{ uri: item.url }}
               />
             </Animated.View>
           );
@@ -309,10 +304,10 @@ export default class Slider extends React.Component {
         <View style={{ height: 60 }}>
           <View style={styles.footer}>
             <View style={styles.footBottonView}>
-              <Button transparent style={styles.disslikeBtn}>
+              <Button transparent large style={styles.disslikeBtn}>
                 <Icon
-                  style={{ color: 'white', fontSize: 26 }}
-                  name="logo-apple"
+                  style={{ color: 'white', fontSize: 36 }}
+                  name="thumbs-down"
                 />
               </Button>
             </View>
@@ -324,15 +319,17 @@ export default class Slider extends React.Component {
                 justifyContent: 'center'
               }}
             >
-              <Text style={{ fontWeight: '700', color: 'grey' }}>
-                {this.props.counter} card
+              <Text
+                style={{ fontWeight: '700', color: 'grey', marginTop: -10 }}
+              >
+                {this.cardQty()}
               </Text>
             </View>
             <View style={styles.footBottonView}>
-              <Button transparent style={styles.likeBtn}>
+              <Button transparent large style={styles.likeBtn}>
                 <Icon
-                  style={{ color: 'white', fontSize: 26 }}
-                  name="logo-apple"
+                  style={{ color: 'white', fontSize: 36 }}
+                  name="thumbs-up"
                 />
               </Button>
             </View>
@@ -340,6 +337,13 @@ export default class Slider extends React.Component {
         </View>
       </View>
     );
+  }
+
+  cardQty() {
+    const word = this.props.images.length > 1 ? ' cards' : ' card';
+    return this.props.isLoading
+      ? 'Downloading...'
+      : this.props.images.length + word;
   }
 }
 
@@ -365,9 +369,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   disslikeBtn: {
-    opacity: this.dislikeOpacity,
     backgroundColor: 'black',
-    borderRadius: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 33,
+    height: 66,
+    width: 66,
     shadowOpacity: 0.75,
     shadowRadius: 5,
     shadowColor: 'black',
@@ -377,11 +384,16 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    marginTop: -20
   },
   likeBtn: {
     backgroundColor: 'red',
-    borderRadius: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 33,
+    height: 66,
+    width: 66,
     shadowOpacity: 0.75,
     shadowRadius: 5,
     shadowColor: 'black',
