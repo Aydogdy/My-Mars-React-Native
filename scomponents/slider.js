@@ -300,7 +300,17 @@ export default class Slider extends React.Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
-        <View style={{ flex: 1 }}>{this.renderUsers()}</View>
+        <View
+          style={{
+            flex: 1,
+            shadowOpacity: 0.55,
+            shadowRadius: 10,
+            shadowColor: 'black',
+            shadowOffset: { height: 1, width: 1 }
+          }}
+        >
+          {this.renderUsers()}
+        </View>
         <View style={{ height: 60 }}>
           <View style={styles.footer}>
             <View style={styles.footBottonView}>
@@ -340,10 +350,8 @@ export default class Slider extends React.Component {
   }
 
   cardQty() {
-    const word = this.props.images.length > 1 ? ' cards' : ' card';
-    return this.props.isLoading
-      ? 'Downloading...'
-      : this.props.images.length + word;
+    const word = this.props.counter > 1 ? ' cards' : ' card';
+    return this.props.isLoading ? 'Downloading...' : this.props.counter + word;
   }
 }
 

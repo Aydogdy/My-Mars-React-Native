@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import {
   StyleSheet,
   View,
+  ScrollView,
+  Text,
   TouchableWithoutFeedback,
   Dimensions
 } from 'react-native';
@@ -20,7 +22,24 @@ class Favorites extends Component {
       );
     });
 
-    return <View style={styles.container}>{images}</View>;
+    return <View style={styles.container}>{this.renderImages(images)}</View>;
+  }
+
+  renderImages(images) {
+    return this.props.images.length > 0 ? (
+      <ScrollView>{images}</ScrollView>
+    ) : (
+      <View
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'center',
+          paddingTop: 20
+        }}
+      >
+        <Text style={{ fontSize: 22 }}>There is no image</Text>
+      </View>
+    );
   }
 }
 
@@ -31,13 +50,14 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
+    alignItems: 'flex-start',
     backgroundColor: '#eee'
   },
   imageWrap: {
     margin: 2,
     padding: 2,
-    height: Dimensions.get('window').height / 3 - 12,
-    width: Dimensions.get('window').width / 2 - 4,
+    height: Dimensions.get('window').height / 2 - 8,
+    width: Dimensions.get('window').width - 12,
     backgroundColor: '#fff'
   }
 });

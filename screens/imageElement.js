@@ -13,8 +13,8 @@ export default ImageElement;
 
 const styles = StyleSheet.create({
   image: {
-    flex: 1,
-    width: null,
-    alignSelf: 'stretch'
+    flex: 1
+    // width: null
+    // alignSelf: 'stretch'
   }
 });

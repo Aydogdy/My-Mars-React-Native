@@ -36,7 +36,7 @@ class Home extends Component {
     this.state = {
       currentIndex: 0,
       images: [],
-      counter: images.length,
+      counter: 0,
       disliked: {},
       liked: [],
       loading: true
@@ -69,14 +69,17 @@ class Home extends Component {
   };
 
   handleUndo() {
-    if (this.state.disliked.id && this.state.disliked.id !== undefined) {
-      this.setState({ counter: this.state.counter + 1 });
+    if (this.state.disliked.id !== undefined && this.state.disliked.id) {
       const images = [...this.state.images];
       images.unshift(this.state.disliked);
+
       this.setState({ images });
-      this.setState({ currentIndex: this.state.currentIndex - 1 });
+      this.setState({ counter: this.state.counter + 1 });
+
       this.setState({ disliked: {} });
+      this.setState({ currentIndex: this.state.currentIndex - 1 });
     }
+    // alert(this.state.images.length);
   }
 
   componentDidMount = () => {
@@ -105,6 +108,7 @@ class Home extends Component {
         this.setState({
           images
         });
+        this.setState({ counter: images.length });
       })
       .catch(error => {
         console.error(error);
