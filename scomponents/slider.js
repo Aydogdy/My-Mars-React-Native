@@ -148,7 +148,7 @@ export default class Slider extends React.Component {
                   resizeMode: 'cover',
                   borderRadius: 20
                 }}
-                source={item.uri}
+                source={{ uri: item.uri }}
               />
             </Animated.View>
           );
@@ -195,7 +195,7 @@ export default class Slider extends React.Component {
                   resizeMode: 'cover',
                   borderRadius: 20
                 }}
-                source={item.uri}
+                source={{ uri: item.uri }}
               />
             </Animated.View>
           );

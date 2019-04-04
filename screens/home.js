@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View } from 'react-native';
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+  ActivityIndicator
+} from 'react-native';
 import { Navigation } from 'react-native-navigation';
 import { Icon, Button } from 'native-base';
 import Slider from '../scomponents/slider';
@@ -36,17 +42,19 @@ const images = [
   }
 ];
 
+const apiKey = '43EvTATZn1TBy3egVg65g2Rjda6s7ijb5VCtcOQU';
+
 class Home extends Component {
   constructor() {
     super();
 
     this.state = {
       currentIndex: 0,
-      images: images,
+      images: [],
       counter: images.length,
       disliked: {},
       liked: [],
-      loading: false
+      loading: true
     };
   }
 
@@ -89,39 +97,40 @@ class Home extends Component {
     }
   }
 
-  // componentDidMount = () => {
-  //   this.setState({ loading: true });
-  //   fetch(
-  //     'https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=2015-6-3&api_key=43EvTATZn1TBy3egVg65g2Rjda6s7ijb5VCtcOQU',
-  //     {
-  //       method: 'GET'
-  //     }
-  //   )
-  //     .then(response => response.json())
-  //     .then(responseJson => {
-  //       this.setState({ loading: false });
+  componentDidMount = () => {
+    this.setState({ loading: true });
+    fetch(
+      'https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?sol=1000&page=2&api_key=' +
+        apiKey,
+      {
+        method: 'GET'
+      }
+    )
+      .then(response => response.json())
+      .then(responseJson => {
+        this.setState({ loading: false });
 
-  //       let images = [];
-  //       responseJson.photos.forEach(function(item, key) {
-  //         images.push({
-  //           id: item.id,
-  //           title: item.camera.name,
-  //           txt: item.camera.full_name,
-  //           uri: item.img_src,
-  //           date: item.earth_date
-  //         });
-  //       });
+        let images = [];
+        responseJson.photos.forEach(function(item, key) {
+          images.push({
+            id: item.id,
+            title: item.rover.name,
+            txt: item.camera.full_name,
+            uri: item.img_src,
+            date: item.earth_date
+          });
+        });
 
-  //       // this.setState({
-  //       //   images
-  //       // });
-  //       this.setState({ counter: images.length });
-  //     })
-  //     .catch(error => {
-  //       console.error(error);
-  //       this.setState({ loading: false });
-  //     });
-  // };
+        this.setState({
+          images
+        });
+        this.setState({ counter: images.length });
+      })
+      .catch(error => {
+        console.error(error);
+        this.setState({ loading: false });
+      });
+  };
 
   render() {
     return (
@@ -141,6 +150,7 @@ class Home extends Component {
         </View>
 
         <View style={{ flex: 14 }}>
+          {this.getScreenBody()}
           <Slider
             currentIndex={this.state.currentIndex}
             onDislike={this.handleDislike}
@@ -152,6 +162,14 @@ class Home extends Component {
         </View>
       </View>
     );
+  }
+
+  getScreenBody() {
+    return this.state.loading ? (
+      <View style={{ flex: 1, justifyContent: 'center' }}>
+        <ActivityIndicator size="large" color="red" />
+      </View>
+    ) : null;
   }
 }
 
