@@ -1,1 +1,1 @@
-![](assets/WithDummyData.gif | width=100)
+<img src="assets/WithDummyData.gif" width="40" height="40" />
