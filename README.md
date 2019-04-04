@@ -1,1 +1,1 @@
-![](assets/WithDummyData.gif=200x250)
+![](assets/WithDummyData.gif | width=100)
