@@ -21,13 +21,6 @@ import { Icon, Button } from 'native-base';
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
-const images = [
-  { id: 1, uri: require('../assets/images.jpg'), txt: 'Image 1' },
-  { id: 2, uri: require('../assets/nasa1.jpeg'), txt: 'Image 2' },
-  { id: 3, uri: require('../assets/nasa2.jpg'), txt: 'Image 3' },
-  { id: 4, uri: require('../assets/nasa3.jpg'), txt: 'Image 4' }
-];
-
 export default class Slider extends React.Component {
   constructor() {
     super();
@@ -119,34 +112,14 @@ export default class Slider extends React.Component {
                   height: SCREEN_HEIGHT - 130,
                   width: SCREEN_WIDTH,
                   padding: 10,
-                  position: 'absolute'
+                  position: 'absolute',
+                  shadowOpacity: 0.55,
+                  shadowRadius: 10,
+                  shadowColor: 'black',
+                  shadowOffset: { height: 1, width: 1 }
                 }
               ]}
             >
-              <Animated.View
-                style={{
-                  opacity: this.likeOpacity,
-                  transform: [{ rotate: '-30deg' }],
-                  position: 'absolute',
-                  top: 50,
-                  left: 40,
-                  zIndex: 1000
-                }}
-              >
-                <Text
-                  style={{
-                    borderWidth: 1,
-                    borderColor: 'green',
-                    color: 'green',
-                    fontSize: 32,
-                    fontWeight: '800',
-                    padding: 10
-                  }}
-                >
-                  LIKE
-                </Text>
-              </Animated.View>
-
               <Animated.View
                 style={{
                   position: 'absolute',
@@ -154,7 +127,8 @@ export default class Slider extends React.Component {
                   left: 40,
                   right: 40,
                   zIndex: 1000,
-                  backgroundColor: 'rgba(0, 0, 0, 0.5)'
+                  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                  padding: 10
                 }}
               >
                 <Text style={{ color: 'white', fontSize: 22 }}>
@@ -166,30 +140,6 @@ export default class Slider extends React.Component {
                 </Text>
               </Animated.View>
 
-              <Animated.View
-                style={{
-                  opacity: this.dislikeOpacity,
-                  transform: [{ rotate: '30deg' }],
-                  position: 'absolute',
-                  top: 50,
-                  right: 40,
-                  zIndex: 1000
-                }}
-              >
-                <Text
-                  style={{
-                    borderWidth: 1,
-                    borderColor: 'red',
-                    color: 'red',
-                    fontSize: 32,
-                    fontWeight: '800',
-                    padding: 10
-                  }}
-                >
-                  NOPE
-                </Text>
-              </Animated.View>
-
               <Image
                 style={{
                   flex: 1,
@@ -198,7 +148,7 @@ export default class Slider extends React.Component {
                   resizeMode: 'cover',
                   borderRadius: 20
                 }}
-                source={{ uri: item.uri }}
+                source={item.uri}
               />
             </Animated.View>
           );
@@ -219,64 +169,21 @@ export default class Slider extends React.Component {
             >
               <Animated.View
                 style={{
-                  opacity: 0,
-                  transform: [{ rotate: '-30deg' }],
                   position: 'absolute',
-                  top: 50,
-                  left: 40,
-                  zIndex: 1000
-                }}
-              >
-                <Text
-                  style={{
-                    borderWidth: 1,
-                    borderColor: 'green',
-                    color: 'green',
-                    fontSize: 32,
-                    fontWeight: '800',
-                    padding: 10
-                  }}
-                >
-                  LIKE
-                </Text>
-              </Animated.View>
-
-              <Animated.View
-                style={{
-                  position: 'absolute',
-                  top: 50,
+                  top: 60,
                   left: 40,
                   right: 40,
-                  zIndex: 1000
+                  zIndex: 1000,
+                  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                  padding: 10
                 }}
               >
+                <Text style={{ color: 'white', fontSize: 20 }}>
+                  {item.title}
+                </Text>
                 <Text style={{ color: 'white', fontSize: 20 }}>{item.txt}</Text>
                 <Text style={{ color: 'white', fontSize: 20 }}>
                   {item.date}
-                </Text>
-              </Animated.View>
-
-              <Animated.View
-                style={{
-                  opacity: 0,
-                  transform: [{ rotate: '30deg' }],
-                  position: 'absolute',
-                  top: 50,
-                  right: 40,
-                  zIndex: 1000
-                }}
-              >
-                <Text
-                  style={{
-                    borderWidth: 1,
-                    borderColor: 'red',
-                    color: 'red',
-                    fontSize: 32,
-                    fontWeight: '800',
-                    padding: 10
-                  }}
-                >
-                  NOPE
                 </Text>
               </Animated.View>
 
@@ -288,7 +195,7 @@ export default class Slider extends React.Component {
                   resizeMode: 'cover',
                   borderRadius: 20
                 }}
-                source={{ uri: item.url }}
+                source={item.uri}
               />
             </Animated.View>
           );
@@ -302,25 +209,23 @@ export default class Slider extends React.Component {
       <View style={{ flex: 1 }}>
         <View
           style={{
-            flex: 1,
-            shadowOpacity: 0.55,
-            shadowRadius: 10,
-            shadowColor: 'black',
-            shadowOffset: { height: 1, width: 1 }
+            flex: 1
           }}
         >
           {this.renderUsers()}
         </View>
         <View style={{ height: 60 }}>
           <View style={styles.footer}>
-            <View style={styles.footBottonView}>
+            <Animated.View
+              style={[styles.footBottonView, { opacity: this.dislikeOpacity }]}
+            >
               <Button transparent large style={styles.disslikeBtn}>
                 <Icon
                   style={{ color: 'white', fontSize: 36 }}
                   name="thumbs-down"
                 />
               </Button>
-            </View>
+            </Animated.View>
             <View
               style={{
                 flex: 1,
@@ -335,14 +240,16 @@ export default class Slider extends React.Component {
                 {this.cardQty()}
               </Text>
             </View>
-            <View style={styles.footBottonView}>
+            <Animated.View
+              style={[styles.footBottonView, { opacity: this.likeOpacity }]}
+            >
               <Button transparent large style={styles.likeBtn}>
                 <Icon
                   style={{ color: 'white', fontSize: 36 }}
                   name="thumbs-up"
                 />
               </Button>
-            </View>
+            </Animated.View>
           </View>
         </View>
       </View>

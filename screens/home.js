@@ -7,25 +7,32 @@ import Slider from '../scomponents/slider';
 const images = [
   {
     id: 1,
-    uri:
-      'http://mars.jpl.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/01004/opgs/edr/fcam/FLB_486615455EDR_F0481570FHAZ00323M_.JPG',
-    txt: 'Operation IceBridge: Exploring Alaska’s Mountain Glacier'
+    uri: require('../assets/images.jpg'),
+    txt: 'Operation IceBridge: Exploring Alaska’s Mountain Glacier',
+    title: 'Title',
+    date: '02/22/2019'
   },
   {
     id: 2,
     uri: require('../assets/nasa1.jpeg'),
-    txt: 'Hubble Shows Star Cluster’s True Identity'
+    txt: 'Hubble Shows Star Cluster’s True Identity',
+    title: 'Title',
+    date: '02/22/2019'
   },
   {
     id: 3,
     uri: require('../assets/nasa2.jpg'),
-    txt: 'Hubble Peers into the Vast Distance'
+    txt: 'Hubble Peers into the Vast Distance',
+    title: 'Title',
+    date: '02/22/2019'
   },
   {
     id: 4,
     uri: require('../assets/nasa3.jpg'),
     txt:
-      'In the northern constellation of Coma Berenices lies the impressive Coma Cluster'
+      'In the northern constellation of Coma Berenices lies the impressive Coma Cluster',
+    title: 'Title',
+    date: '02/22/2019'
   }
 ];
 
@@ -35,11 +42,11 @@ class Home extends Component {
 
     this.state = {
       currentIndex: 0,
-      images: [],
-      counter: 0,
+      images: images,
+      counter: images.length,
       disliked: {},
       liked: [],
-      loading: true
+      loading: false
     };
   }
 
@@ -61,60 +68,60 @@ class Home extends Component {
   };
 
   handleLike = () => {
+    const likedImage = this.state.images[this.state.currentIndex];
+    const likedImages = [...this.state.liked];
+
+    likedImages.unshift(likedImage);
+    this.setState({ liked: likedImages });
+
     this.setState({ counter: this.state.counter - 1 });
-    const liked = [...this.state.liked];
-    liked.unshift(this.state.images[this.state.currentIndex]);
-    this.setState({ liked });
     this.setState({ currentIndex: this.state.currentIndex + 1 });
+
+    this.setState({ disliked: {} });
   };
 
   handleUndo() {
     if (this.state.disliked.id !== undefined && this.state.disliked.id) {
-      const images = [...this.state.images];
-      images.unshift(this.state.disliked);
-
-      this.setState({ images });
-      this.setState({ counter: this.state.counter + 1 });
-
       this.setState({ disliked: {} });
+
+      this.setState({ counter: this.state.counter + 1 });
       this.setState({ currentIndex: this.state.currentIndex - 1 });
     }
-    // alert(this.state.images.length);
   }
 
-  componentDidMount = () => {
-    this.setState({ loading: true });
-    fetch(
-      'https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=2015-6-3&api_key=43EvTATZn1TBy3egVg65g2Rjda6s7ijb5VCtcOQU',
-      {
-        method: 'GET'
-      }
-    )
-      .then(response => response.json())
-      .then(responseJson => {
-        this.setState({ loading: false });
+  // componentDidMount = () => {
+  //   this.setState({ loading: true });
+  //   fetch(
+  //     'https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=2015-6-3&api_key=43EvTATZn1TBy3egVg65g2Rjda6s7ijb5VCtcOQU',
+  //     {
+  //       method: 'GET'
+  //     }
+  //   )
+  //     .then(response => response.json())
+  //     .then(responseJson => {
+  //       this.setState({ loading: false });
 
-        let images = [];
-        responseJson.photos.forEach(function(item, key) {
-          images.push({
-            id: item.id,
-            title: item.camera.name,
-            txt: item.camera.full_name,
-            uri: item.img_src,
-            date: item.earth_date
-          });
-        });
+  //       let images = [];
+  //       responseJson.photos.forEach(function(item, key) {
+  //         images.push({
+  //           id: item.id,
+  //           title: item.camera.name,
+  //           txt: item.camera.full_name,
+  //           uri: item.img_src,
+  //           date: item.earth_date
+  //         });
+  //       });
 
-        this.setState({
-          images
-        });
-        this.setState({ counter: images.length });
-      })
-      .catch(error => {
-        console.error(error);
-        this.setState({ loading: false });
-      });
-  };
+  //       // this.setState({
+  //       //   images
+  //       // });
+  //       this.setState({ counter: images.length });
+  //     })
+  //     .catch(error => {
+  //       console.error(error);
+  //       this.setState({ loading: false });
+  //     });
+  // };
 
   render() {
     return (

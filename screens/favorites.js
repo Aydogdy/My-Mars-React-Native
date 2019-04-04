@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     margin: 2,
     padding: 2,
     height: Dimensions.get('window').height / 2 - 8,
-    width: Dimensions.get('window').width - 12,
+    width: Dimensions.get('window').width - 4,
     backgroundColor: '#fff'
   }
 });
