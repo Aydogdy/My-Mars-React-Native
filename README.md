@@ -7,4 +7,4 @@
 
 
 ### App with mars open source api data
-<img src="assets/WithDummyData.gif" width="200" height="440" />
+<img src="assets/ImagesFromApi.gif" width="200" height="440" />
