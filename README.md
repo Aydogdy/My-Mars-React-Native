@@ -1,1 +1,1 @@
-<img src="assets/WithDummyData.gif" width="200" height="340" />
+<img src="assets/WithDummyData.gif" width="200" height="540" />
